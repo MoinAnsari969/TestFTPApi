@@ -3,7 +3,7 @@ name: Build, Migrate, Backup, and Deploy .NET Core API
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-migrate-deploy:
@@ -33,7 +33,7 @@ jobs:
       - name: Run EF Core Migrations
         run: dotnet ef database update --project TestFTPApi.csproj
         env:
-          ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
+          ConnectionStrings__DefaultConnection:  Data Source=localhost\\SQLEXPRESS;Initial Catalog=ECommerceDB;Trusted_Connection=True;Integrated Security=False;Trust Server Certificate=True; User Id=sa; Password=sa;
 
       - name: Publish self-contained build
         run: |
@@ -54,13 +54,14 @@ jobs:
       - name: Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          server: eu-central-1.sftpcloud.io #${{ secrets.FTP_HOST }}
+          username: 1b2cc285bcc24652bd56c9136f9f688f #${{ secrets.FTP_USERNAME }}
+          password: OgmMFXM1yFIeuU1TCAGrOA39XlHxJdbu #${{ secrets.FTP_PASSWORD }}
           local-dir: ${{ env.PUBLISH_DIR }}
           server-dir: /public_html/api/
           protocol: ftp
           exclude: |
             **/.git*
+            **/.github*
             **/obj/**
             **/bin/**
