@@ -12,7 +12,7 @@ jobs:
     env:
       DOTNET_VERSION: '8.0.x'  # Adjust to your target version
       RUNTIME_ID: linux-x64    # Change to win-x64 or linux-arm if needed
-      PUBLISH_DIR: ./publish
+      PUBLISH_DIR: ./publish/
       BACKUP_FOLDER: backup_$(date +'%Y%m%d_%H%M%S')
 
     steps:
@@ -33,10 +33,7 @@ jobs:
       
       - name: Publish self-contained build
         run: |
-          dotnet publish -c Release -r ${{ env.RUNTIME_ID }} --self-contained true -o ${{ env.PUBLISH_DIR }}
-
-      - name: Install lftp
-        run: sudo apt-get install -y lftp      
+          dotnet publish -c Release -r ${{ env.RUNTIME_ID }} --self-contained true -o ${{ env.PUBLISH_DIR }}   
 
       - name: Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
