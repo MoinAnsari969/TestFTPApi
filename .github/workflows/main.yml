@@ -36,23 +36,14 @@ jobs:
           dotnet publish -c Release -r ${{ env.RUNTIME_ID }} --self-contained true -o ${{ env.PUBLISH_DIR }}
 
       - name: Install lftp
-        run: sudo apt-get install -y lftp
-
-      - name: Backup existing deployment from FTP
-        run: |
-          lftp -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_HOST }} -e "
-            set ssl:verify-certificate no;
-            mkdir -p /backups/${{ env.BACKUP_FOLDER }};
-            mirror --verbose /public_html/api /backups/${{ env.BACKUP_FOLDER }};
-            bye
-          "
+        run: sudo apt-get install -y lftp      
 
       - name: Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: eu-central-1.sftpcloud.io #${{ secrets.FTP_HOST }}
-          username: 1b2cc285bcc24652bd56c9136f9f688f #${{ secrets.FTP_USERNAME }}
-          password: OgmMFXM1yFIeuU1TCAGrOA39XlHxJdbu #${{ secrets.FTP_PASSWORD }}
+          username: 14e547f340ea415292e5d48639afba4d #${{ secrets.FTP_USERNAME }}
+          password: mbPENKkQRPUhcl9MBwaAo8VomApswRnI #${{ secrets.FTP_PASSWORD }}
           local-dir: ${{ env.PUBLISH_DIR }}
           server-dir: /public_html/api/
           protocol: ftp
@@ -61,3 +52,4 @@ jobs:
             **/.github*
             **/obj/**
             **/bin/**
+            appsettings.json
