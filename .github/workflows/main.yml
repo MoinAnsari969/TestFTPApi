@@ -30,11 +30,7 @@ jobs:
       - name: Build project
         run: dotnet build --no-restore --configuration Release
 
-      - name: Run EF Core Migrations
-        run: dotnet ef database update --project TestFTPApi.csproj
-        env:
-          ConnectionStrings__DefaultConnection:  Data Source=localhost\\SQLEXPRESS;Initial Catalog=ECommerceDB;Trusted_Connection=True;Integrated Security=False;Trust Server Certificate=True; User Id=sa; Password=sa;
-
+      
       - name: Publish self-contained build
         run: |
           dotnet publish -c Release -r ${{ env.RUNTIME_ID }} --self-contained true -o ${{ env.PUBLISH_DIR }}
